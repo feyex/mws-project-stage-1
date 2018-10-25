@@ -1,4 +1,4 @@
-// import idb from 'idb';
+
 
 //create the indexeddb name to be accessible in user browser
 const dbPromise = idb.open('restaurant-db', 1, upgradeDB => {

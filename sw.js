@@ -15,7 +15,6 @@ this.addEventListener('install', async () => {
     '/app/js/main.js',
     'app/js/dbhelper.js',
     'app/js/indexdb.js',
-    'app/js/idb.js',
     'app/data/restaurants.json',
     'app/js/restaurant_info.js',
     'app/img/1.jpg',
@@ -28,7 +27,11 @@ this.addEventListener('install', async () => {
     'app/img/8.jpg',
     'app/img/9.jpg',
     'app/img/10.jpg',
-    'restaurant.html?id=1', 'restaurant.html?id=2', 'restaurant.html?id=3', 'restaurant.html?id=4', 'restaurant.html?id=5', 'restaurant.html?id=6', 'restaurant.html?id=7', 'restaurant.html?id=8', 'restaurant.html?id=9', 'restaurant.html?id=10'
+    'restaurant.html?id=1', 'restaurant.html?id=2', 'restaurant.html?id=3', 'restaurant.html?id=4', 'restaurant.html?id=5', 'restaurant.html?id=6', 'restaurant.html?id=7', 'restaurant.html?id=8', 'restaurant.html?id=9', 'restaurant.html?id=10',
+    'https://unpkg.com/leaflet@1.3.1/dist/leaflet.js',
+    'https://unpkg.com/leaflet@1.3.1/dist/leaflet.css',
+    'https://leafletjs.com/reference-1.3.0.html#marker'
+
   ]).then(() => {
     console.log('WORKER: install completed');
   })
@@ -65,46 +68,24 @@ self.addEventListener('fetch', function(event) {
 
 
 //  handler to test if the request is for port1337 and to check if it directs to the right function
- self.addEventListener('fetch', event => {
-  const request = event.request;
-  const requestUrl = new URL(request.url);
+//  self.addEventListener('fetch', event => {
+//   const request = event.request;
+//   const requestUrl = new URL(request.url);
 
-  if (requestUrl.port === '1337') {
-    event.respondWith(dbResponse(request));
-  }
-  else {
-    event.respondWith(cacheResponse(request));
-  }
-});
+//   if (requestUrl.port === '1337') {
+//     event.respondWith(dbResponse(request));
+//   }
+//   else {
+//     event.respondWith(cacheResponse(request));
+//   }
+// });
 
-function cacheResponse(request) {
-  // match request...
-  return caches.match(request)
-    .then(response => {
-    // return matched response OR if no match then
-    // fetch, open cache, cache.put response.clone, return response
-      return 
-        response || 
-        fetch(request).then(fetchResponse => {
-          return caches.open(CACHE_NAME).then(cache => {
-            // filter out browser-sync resources otherwise it will err
-            if (!fetchResponse.url.includes('browser-sync')) { // prevent err
-              cache.put(request, fetchResponse.clone()); // put clone in cache
-            }
-            return fetchResponse; // send original back to browser
-          });
-      });
-  }).catch(error => new Response(error));
-}
-
-
-//create cache function
 // function cacheResponse(request) {
-  // match request...
-  // return caches.match(request)
-    // .then(response => {
-    // return matched response OR if no match then
-    // fetch, open cache, cache.put response.clone, return response
+//   // match request...
+//   return caches.match(request)
+//     .then(response => {
+//     // return matched response OR if no match then
+//     // fetch, open cache, cache.put response.clone, return response
 //       return 
 //         response || 
 //         fetch(request).then(fetchResponse => {
@@ -118,3 +99,6 @@ function cacheResponse(request) {
 //       });
 //   }).catch(error => new Response(error));
 // }
+
+
+
