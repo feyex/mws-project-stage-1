@@ -20,18 +20,18 @@ class DBHelper {
    */
   static fetchRestaurants(callback) {
 
-    const dbPromise = idb.open('restaurant-db', 4, function (upgradeDB) {
+    const dbPromise = idb.open('restaurant-db', 1, function (upgradeDB) {
       
-      if (!upgradeDB.objectStoreNames.contains('restaurant-store')) {
-        upgradeDB.createObjectStore('restaurant-store', { keyPath: 'id' });
+      if (!upgradeDB.objectStoreNames.contains('restaurants')) {
+        upgradeDB.createObjectStore('restaurants', { keyPath: 'id' });
       }
 
 });
 
 function getDbData() {
   return dbPromise.then(db=>{
-     const tx = db.transaction('restaurant-store')
-       .objectStore('restaurant-store');
+     const tx = db.transaction('restaurants')
+       .objectStore('restaurants');
        return tx.getAll();
        });
 }
@@ -49,8 +49,8 @@ fetch(DBHelper.DATABASE_URL)
     return restaurants;
   }).then(restaurants => {
     dbPromise.then(db => {
-      const tx = db.transaction('restaurant-store', 'readwrite');
-      const restaurantStore = tx.objectStore('restaurant-store');
+      const tx = db.transaction('restaurants', 'readwrite');
+      const restaurantStore = tx.objectStore('restaurants');
       for (const restaurant of restaurants) {
         restaurantStore.put(restaurant);
       }

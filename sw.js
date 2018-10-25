@@ -17,6 +17,8 @@ this.addEventListener('install', async () => {
     'app/js/indexdb.js',
     'app/data/restaurants.json',
     'app/js/restaurant_info.js',
+    '/manifest.json',
+    'app/src/offline1.gif',
     'app/img/1.jpg',
     'app/img/2.jpg',
     'app/img/3.jpg',
@@ -37,68 +39,42 @@ this.addEventListener('install', async () => {
   })
 });
 
-self.addEventListener('fetch', function(event) {
-  console.log(event.request.url);
+
+self.addEventListener("fetch", event => {
+  let getUrl = new URL(event.request.url);
+
+   if (getUrl.origin === location.origin) {
  
-  event.respondWith(
-    caches.match(event.request).then(function(response) {
-      return response || fetch(event.request);
-    })
-  );
- });
+       if (getUrl.pathname === "/" || getUrl.pathname ===  "/index.html") {
+           event.respondWith(caches.match("/"));
+           if(getUrl.pathname.includes('.jpg')){
+               event.respondWith(caches.match("src/offline1.gif"));
+           }
+       }
+       else {  
+           event.respondWith(caches.match(event.request));
+       }
+       return;
+   }
+
+   event.respondWith(
+       caches.match(event.request).then(response => {
+           if (response) {
+               return response;
+           } else {
+               console.log(
+                   event.request.url + " not found in cache fetching from network."
+               );
+               return fetch(event.request);
+           }
+       })
+   );
+});
 
 
-// self.addEventListener('fetch', function(event) {
-//   console.log(event.request.url);
- 
-//   event.respondWith(
-//     caches.match(event.request).then(function(response) {
-//       return response || fetch(event.request).then(fetchResponse => {
-//         return caches.open(CACHE_NAME).then(cache => {
-//           //filter out browser-sync resources to prevent error
-//           if (!fetchResponse.url.includes('broser-sync')) {
-//             cache.put(event.request, fetchResponse.clone());
-//           } 
-//             return fetchResponse;
-//         });
-//       });
-//     }).catch(error => new Response(error));
-//   );
-//  });
 
 
-//  handler to test if the request is for port1337 and to check if it directs to the right function
-//  self.addEventListener('fetch', event => {
-//   const request = event.request;
-//   const requestUrl = new URL(request.url);
 
-//   if (requestUrl.port === '1337') {
-//     event.respondWith(dbResponse(request));
-//   }
-//   else {
-//     event.respondWith(cacheResponse(request));
-//   }
-// });
-
-// function cacheResponse(request) {
-//   // match request...
-//   return caches.match(request)
-//     .then(response => {
-//     // return matched response OR if no match then
-//     // fetch, open cache, cache.put response.clone, return response
-//       return 
-//         response || 
-//         fetch(request).then(fetchResponse => {
-//           return caches.open(CACHE_NAME).then(cache => {
-//             // filter out browser-sync resources otherwise it will err
-//             if (!fetchResponse.url.includes('browser-sync')) { // prevent err
-//               cache.put(request, fetchResponse.clone()); // put clone in cache
-//             }
-//             return fetchResponse; // send original back to browser
-//           });
-//       });
-//   }).catch(error => new Response(error));
-// }
 
 
 
