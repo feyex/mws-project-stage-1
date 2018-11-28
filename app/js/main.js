@@ -158,6 +158,36 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
 createRestaurantHTML = (restaurant) => {
   const li = document.createElement('li');
 
+  const fav = document.createElement('button');
+  fav.className = 'fav-control';
+  fav.setAttribute('aria-label', 'favorite');
+  if (restaurant.is_favorite === 'true') {
+    fav.classList.add('active');
+    fav.setAttribute('aria-pressed', 'true');
+    fav.innerHTML = `Remove ${restaurant.name} as a favorite`;
+    fav.title = `Remove ${restaurant.name} as a favorite`;
+  } else {
+    fav.setAttribute('aria-pressed', 'false');
+    fav.innerHTML = `Add ${restaurant.name} as a favorite`;
+    fav.title = `Add ${restaurant.name} as a favorite`;
+  }
+  fav.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    if (fav.classList.contains('active')) {
+      fav.setAttribute('aria-pressed', 'false');
+      fav.innerHTML = `Add ${restaurant.name} as a favorite`;
+      fav.title = `Add ${restaurant.name} as a favorite`;
+      DBHelper.unMarkFavorite(restaurant.id);
+    } else {
+      fav.setAttribute('aria-pressed', 'true');
+      fav.innerHTML = `Remove ${restaurant.name} as a favorite`;
+      fav.title = `Remove ${restaurant.name} as a favorite`;
+      DBHelper.markFavorite(restaurant.id);
+    }
+    fav.classList.toggle('active');
+  });
+  li.append(fav);
+
   const image = document.createElement('img');
   image.className = 'restaurant-img';
   image.src = DBHelper.imageUrlForRestaurant(restaurant);

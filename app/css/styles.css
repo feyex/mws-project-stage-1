@@ -390,6 +390,60 @@ nav h1 a {
   cursor: pointer;
 }
 
+#restaurants-list .fav-control {
+  background-color: white;
+  width: 44px;
+  height: 40px;
+  position: absolute;
+  align-self: flex-end;
+  margin-top: 0px;
+  margin-left: 134px;
+  padding:18px;
+  border: 1px solid #999;
+  border: 4px double #999;
+  background-image: url('/app/img/favorite6.png');
+  background-repeat: no-repeat;
+  background-position: 6px -26px;
+  background-size: 20px;
+  cursor: pointer;
+  text-indent: -10000px;
+}
+#restaurants-list .fav-control.active  {
+  background-position: 6px 5px;
+}
+#restaurants-list .fav-control:hover {
+  background-position: 6px -70px;
+}
+
+#restaurant-img-container {
+  display: flex;
+  flex-direction: column;
+}
+#restaurant-fav {
+  background-color: rgb(8, 6, 6);
+  width: 44px;
+  height: 43px;
+  position: absolute;
+  align-self: flex-end;
+  margin-top: 6px;
+  margin-left: -6px;
+  padding: 5px;
+  border: 1px solid #999;
+  border: 4px double #999;
+  background-image: url('/app/img/favorite6.png');
+  background-repeat: no-repeat;
+  background-position: 6px -27px;
+  background-size: 21px;
+  cursor: pointer;
+  text-indent: -10000px;
+}
+#restaurant-fav.active {
+  background-position: 6px 5px;
+}
+#restaurant-fav:hover {
+  background-position: 6px -72px;
+}
+
 
 
 /* ====================== Restaurant Details ====================== */
