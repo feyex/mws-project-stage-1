@@ -29,6 +29,7 @@ this.addEventListener('install', async () => {
     'app/img/8.jpg',
     'app/img/9.jpg',
     'app/img/10.jpg',
+    'app/img/favorite6.png',
     'restaurant.html?id=1', 'restaurant.html?id=2', 'restaurant.html?id=3', 'restaurant.html?id=4', 'restaurant.html?id=5', 'restaurant.html?id=6', 'restaurant.html?id=7', 'restaurant.html?id=8', 'restaurant.html?id=9', 'restaurant.html?id=10',
     'https://unpkg.com/leaflet@1.3.1/dist/leaflet.js',
     'https://unpkg.com/leaflet@1.3.1/dist/leaflet.css',
@@ -71,6 +72,13 @@ self.addEventListener("fetch", event => {
    );
 });
 
+// if (request.url.includes('reviews')) {
+//     const qObj = JSON.parse(requestUrl.searchParams.get('q'));
+//     const id = qObj._parent_id;
+//     event.respondWith(idbReviewResponse(request, id));
+// }else {
+//     event.respondWith(idbRestaurantResponse(request));
+// }
 
 
 

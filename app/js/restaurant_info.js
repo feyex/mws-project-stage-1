@@ -154,13 +154,12 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
 /**
  * Create all reviews HTML and add them to the webpage.
  */
-// fillReviewsHTML = (reviews = self.restaurant.reviews) => {
-  const fillReviewsHTML = (error, reviews) => {
-    self.restaurant.reviews = reviews;
-  
-    if (error) {
-      console.log('Error retrieving reviews', error);
-    }
+const fillReviewsHTML = (error, reviews) => {
+  self.restaurant.reviews = reviews;
+
+  if (error) {
+    console.log('Error retrieving reviews', error);
+  }
   const container = document.getElementById('reviews-container');
   const title = document.createElement('h3');
   title.innerHTML = 'Reviews';
@@ -182,26 +181,38 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
 /**
  * Create review HTML and add it to the webpage.
  */
-createReviewHTML = (review) => {
+const createReviewHTML = (review) => {
   const li = document.createElement('li');
   const name = document.createElement('p');
   name.innerHTML = review.name;
   li.appendChild(name);
 
-  const date = document.createElement('p');
-  date.innerHTML = review.date;
-  li.appendChild(date);
+  const createdAt = document.createElement('p');
+  createdAt.classList.add('createdAt');
+  const createdDate = new Date(review.createdAt).toLocaleDateString();
+  createdAt.innerHTML = `Added:<strong>${createdDate}</strong>`;
+  li.appendChild(createdAt);
+
+  const updatedAt = document.createElement('p');
+  const updatedDate = new Date(review.updatedAt).toLocaleDateString();
+  updatedAt.innerHTML = `Updated:<strong>${updatedDate}</strong>`;
+  updatedAt.classList.add('updatedAt');
+  li.appendChild(updatedAt);
 
   const rating = document.createElement('p');
+  rating.classList.add('rating');
   rating.innerHTML = `Rating: ${review.rating}`;
+  rating.dataset.rating = review.rating;
   li.appendChild(rating);
 
   const comments = document.createElement('p');
+  comments.classList.add('comments');
   comments.innerHTML = review.comments;
   li.appendChild(comments);
 
   return li;
-}
+};
+
 
 /**
  * Add restaurant name to the breadcrumb navigation menu

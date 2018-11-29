@@ -18,25 +18,25 @@ class DBHelper {
   //TO ALLOW TOGGLING OPTIONS
   // http://localhost:1337/restaurants/<restaurant_id>/?is_favorite=true
 static markFavorite(id) {
-  fetch(`${DBHelper.DATABASE_URL}/restaurants/${id}/?is_favorite=true`, {
+  fetch(`${DBHelper.DATABASE_URL}/${id}/?is_favorite=true`, {
     method: 'PUT'
   });
 }
 
 // http://localhost:1337/restaurants/<restaurant_id>/?is_favorite=false
 static unMarkFavorite(id) {
-  fetch(`${DBHelper.DATABASE_URL}/restaurants/${id}/?is_favorite=false`, {
+  fetch(`${DBHelper.DATABASE_URL}/${id}/?is_favorite=false`, {
     method: 'PUT'
   });
 }
 
 //To fetch all reviews by restaurant id
 static fetchRestaurantReviewsById(id, callback) {
-  fetch(DBHelper.DATABASE_URL + `/reviews/?restaurant_id=${id}`)
-    .then(response => response.json())
-    .then(data => callback(null, data))
-    .catch(err => callback(err, null));
-}
+    fetch(`http://localhost:1337/reviews/?restaurant_id=${id}`)
+      .then(response => response.json())
+      .then(data => callback(null, data))
+      .catch(err => callback(err, null));
+  }
 
   /**
    * Fetch all restaurants.

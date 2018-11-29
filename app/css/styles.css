@@ -556,6 +556,28 @@ nav h1 a {
   margin: 15px 0 10px;
   
 }
+
+#reviews-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+#reviews-list li p.createdAt {
+  float: right;
+}
+#reviews-list li p.updatedAt {
+  float: right;
+  color: #008800;
+  clear: both;
+}
+#reviews-list li p.rating {
+  float: left;
+}
+#reviews-list li p.comments {
+  clear: both;
+}
+
+
 #restaurant-hours td {
   color: rgb(211, 14, 14);
 }
