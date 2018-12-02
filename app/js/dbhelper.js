@@ -11,8 +11,12 @@ class DBHelper {
     const port = 1337// Change this to your server port
     return `http://localhost:${port}/restaurants`;
 
+  }
 
-    // return `http://localhost:${port}/app/data/restaurants.json`;
+  static get DB_URL() {
+    const port = 1337// Change this to your server port
+    return `http://localhost:${port}/reviews`;
+
   }
 
   //TO ALLOW TOGGLING OPTIONS
@@ -38,15 +42,44 @@ static fetchRestaurantReviewsById(id, callback) {
       .catch(err => callback(err, null));
   }
 
+  // http://localhost:1337/reviews/
+static createRestaurantReview(id, name, rating, comments, callback) {
+  const data = {
+    'restaurant_id': id,
+    'name': name,
+    'rating': rating,
+    'comments': comments
+  };
+  fetch( 'http://localhost:1337/reviews/', {
+    headers: { 'Content-Type': 'application/form-data' },
+    method: 'POST',
+    body: JSON.stringify(data)
+  })
+    .then(response => response.json())
+    .then(data => callback(null, data))
+    .catch(err => callback(err, null));
+}
+
+
   /**
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
 
-    const dbPromise = idb.open('restaurant-db', 1, function (upgradeDB) {
+    const dbPromise = idb.open('restaurant-db', 2, function (upgradeDB) {
       
-      if (!upgradeDB.objectStoreNames.contains('restaurants')) {
-        upgradeDB.createObjectStore('restaurants', { keyPath: 'id' });
+      // if (!upgradeDB.objectStoreNames.contains('restaurants')) {
+      //   upgradeDB.createObjectStore('restaurants', { keyPath: 'id' });
+      // }
+
+      switch (upgradeDB.oldVersion) {
+        case 0:
+          upgradeDB.createObjectStore('restaurants',
+            { keyPath: 'id', unique: true });
+        case 1:
+          const reviewStore = upgradeDB.createObjectStore('reviews',
+            { autoIncrement: true });
+          reviewStore.createIndex('restaurant_id', 'restaurant_id');
       }
 
 });
@@ -64,6 +97,23 @@ function fulfillResult(){
     return callback(null, restaurants);
   });
 }
+
+ function  getAllIdx(store, idx, key) {
+    return dbPromise.then(db => {
+      return db
+        .transaction(store)
+        .objectStore(store)
+        .index(idx)
+        .getAll(key);
+    });
+  }
+ 
+  function fulResult(){
+    getDbData().then(reviews =>{
+      return callback(null, reviews);
+    });
+  }
+
 
 
 fetch(DBHelper.DATABASE_URL)
@@ -87,6 +137,30 @@ return callback(null, restaurants);
   }).catch(() => {
      return fulfillResult();
   });
+
+
+  fetch(DBHelper.DB_URL)
+  .then(function (response) {
+    const reviews = response.json();
+    return reviews;
+  }).then(reviews => {
+    dbPromise.then(db => {
+      const tx = db.transaction('reviews', 'readwrite');
+      const reviewstore = tx.objectStore('reviews');
+      for (const restaurant of reviews) {
+        reviewstore.put(restaurant);
+      }
+      return tx.complete;
+    }).then(()=>{
+      console.log('reviews added');
+    });
+    return reviews;
+  }).then(function (reviews) {
+return callback(null, reviews);
+  }).catch(() => {
+     return fulResult();
+  });
+
 }
 
 
