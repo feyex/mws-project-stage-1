@@ -155,11 +155,12 @@ return callback(null, restaurants);
       console.log('reviews added');
     });
     return reviews;
-  }).then(function (reviews) {
-return callback(null, reviews);
-  }).catch(() => {
-     return fulResult();
-  });
+  })
+//   .then(function (reviews) {
+// return callback(null, reviews);
+//   }).catch(() => {
+//      return fulResult();
+//   });
 
 }
 
