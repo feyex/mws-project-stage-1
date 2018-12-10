@@ -41,10 +41,16 @@ this.addEventListener('install', async () => {
     'http://localhost:1337/reviews/?restaurant_id=8',
     'http://localhost:1337/reviews/?restaurant_id=9',
     'http://localhost:1337/reviews/?restaurant_id=10',
+    'http://localhost:1337/reviews',
+    'http://localhost:1337/restaurants',
     'https://unpkg.com/leaflet@1.3.1/dist/leaflet.js',
     'https://unpkg.com/leaflet@1.3.1/dist/leaflet.css',
-    'https://leafletjs.com/reference-1.3.0.html#marker'
+    'https://leafletjs.com/reference-1.3.0.html#marker',
+    'https://unpkg.com/leaflet@1.3.1/dist/images/marker-icon.png'
 
+
+
+    
   ]).then(() => {
     console.log('WORKER: install completed');
   })
