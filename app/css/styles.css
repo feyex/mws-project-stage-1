@@ -535,7 +535,7 @@ nav h1 a {
   font-weight: 300;
   letter-spacing: -1px;
   padding-bottom: 1pt;
-  margin-left: 473px;
+  margin-left: 517px;
 }
 #reviews-list {
   margin: 0;
@@ -562,200 +562,106 @@ nav h1 a {
   align-items: flex-start;
   justify-content: space-between;
 }
-#reviews-container .review-add-btn {
-  padding: 0 8px;
-  font-size: 1.6em;
-  cursor: pointer;
+
+.form-container {
+  border-bottom: 1px solid #d9d9d9;
+  border-top: 1px solid #fff;
+  padding: 140px 40px 30px;
+  width: 50%;
 }
-#modal {
-  /* begin css tricks */
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  /* end css tricks */
-  z-index: 3;
+
+.form-container {
+  padding: 30px 40px 80px;
+}
+
+.reviews-form {
   display: flex;
   flex-direction: column;
-  border: 1px solid #666;
-  border-radius: 10px;
-  opacity: 0;
-  transition: all .3s;
-  overflow: hidden;
-  background-color: #eee;
-  display: none;
+  flex-wrap: wrap;
+  background: linear-gradient(270deg, rgb(116, 13, 13) 0%,#444444);
 }
-#modal.show {
-  opacity: 1;
-  display: flex
+.reviews-form label{
+  flex: 1;
+  width: 99%;
+  margin-top: 18px;
+  color: #f3901a;
+  text-align: center;
+  font-weight: bold;
 }
-.modal-overlay {
-  width: 100%;
-  height: 100%;
-  z-index: 2; /* places the modalOverlay between main page and modal dialog */
-  background-color: #000;
-  opacity: 0;
-  transition: all .3s;
-  position: fixed;
-  top: 0;
-  left: 0;
-  display: none;
-  margin: 0;
-  padding: 0;
+
+.reviews-form input, .reviews-form textarea {
+  padding: 10px;
+  width: 87%;
+  box-shadow: 1px 2px 4px 0 rgba(0, 0, 0, 0.08);
+  border: 1px solid #dbdbdb;
 }
-.modal-overlay.show {
-  display: block;
-  opacity: 0.5;  
+
+.reviews-form textarea {
+  min-height: 5em;
+  max-width: 90%;
 }
-#modal .close-btn {
-  align-self: flex-end;
-  font-size: 1.4em;
-  margin: 8px 8px 0;
-  padding: 0 8px;
-  cursor: pointer;
+
+.reviews-form button {
+  width: 20%;
+  background: #0c080a78;
+  color: white;
+  border: none;
+  padding: 10px 30px;
+  margin-top: 0px;
+  margin-left: 31rem;
 }
-form {
-  max-width: 900px;
-  padding: 0 20px 20px 20px;
-}
-input, select, .rate, textarea, button {
-  background:#f7ebeb;
-  border: 1px solid #e5e5e5;
-  border-radius: 8px;
-  box-shadow: inset 0 1px 1px #e1e1e1;
-  font-size: 16px;
-  padding: 8px;
-}
-input[type="radio"] {
-  box-shadow: none;
-}
-button {
-  min-width: 48px;
-  min-height: 48px;
-}
+
 button:hover {
-  border: 1px solid #ccc;
-  background-color: #fff;
-}
-button#review-add-btn, 
-button.close-btn, 
-button#submit-review-btn {
-  min-height: 40px;
-}
-button#submit-review-btn {
-  font-weight: bold;
   cursor: pointer;
-  padding: 0 16px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
 }
 
-.fieldset {
-  margin-top: 20px;
-}
-.right {
-  align-self: flex-end;
-}
-#review-form-container {
-  width: 100%;
-  padding: 0 20px 26px;
-  color: #333;
-  overflow-y: auto;
-}
-#review-form-container h2 {
-  margin: 0 0 0 6px;
-}
-#review-form {
-  display: flex;
-  flex-direction: column;
-  background: #e0aaaa;
-  border: 1px solid #e5e5e5;
-  border-radius: 4px;
-}
-#review-form label, #review-form input {
-  display: block;
-}
-#review-form label {
-  font-weight: bold;
-  margin-bottom: 5px;
+/* toast styles*/
+.toast{
+  visibility: hidden; /* Hidden by default. Visible on click */
+  min-width: 250px; 
+  margin-left: -125px; 
+  background-color: #333; 
+  color: #fff; 
+  text-align: center; 
+  border-radius: 2px; 
+  padding: 16px; 
+  position: fixed; 
+  z-index: 1; 
+  left: 50%; 
+  bottom: 30px; 
 }
 
-#review-form .rate label, #review-form .rate input,
-#review-form .rate1 label, #review-form .rate1 input {
-  display: inline-block;
+/* Show the snackbar when clicking on a button (class added with JavaScript) */
+.toast.show {
+  visibility: visible; /* Show the snackbar */
+    /* Add animation: Take 0.5 seconds to fade in and out the snackbar. 
+   However, delay the fade out process for 2.5 seconds */
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
 }
 
-.rate {
-  height: 36px;
-  display: inline-flex;
-  flex-direction: row-reverse;
-  align-items: flex-start;
-  justify-content: flex-end;
+/* Animations to fade the snackbar in and out */
+@keyframes fadein {
+  from {
+    bottom: 0; 
+    opacity: 0;
+  }
+  to {
+    bottom: 30px; 
+    opacity: 1;
+  }
 }
-#review-form .rate > label {
-  margin-bottom: 0;
-  margin-top: -5px;
-  height: 30px;
-}
-.rate:not(:checked) > input {
-  top: -9999px;
-  margin-left: -24px;
-  width: 20px;
-  padding-right: 14px;
-  z-index: -10;
-}
-.rate:not(:checked) > label {
-  float:right;
-  width:1em;
-  overflow:hidden;
-  white-space:nowrap;
-  cursor:pointer;
-  font-size:30px;
-  color:#ccc;
-}
-.rate:not(:checked) > label::before {
-  content: '★ ';
-  position: relative;
-  top: -10px;
-  left: 2px;
-}
-.rate > input:checked ~ label {
-  color: #ffc700;
-}
-.rate > input:checked:focus + label, .rate > input:focus + label {
-  outline: -webkit-focus-ring-color auto 5px;
-}
-.rate:not(:checked) > label:hover,
-.rate:not(:checked) > label:hover ~ label {
-  color: #deb217;
-}
-.rate > input:checked + label:hover,
-.rate > input:checked + label:hover ~ label,
-.rate > input:checked ~ label:hover,
-.rate > input:checked ~ label:hover ~ label,
-.rate > label:hover ~ input:checked ~ label {
-  color: #c59b08;
-}
-#submit-review {
-  align-self: flex-end;
-}
-#review-form {
-  width: 100%;
-  padding: 20px 26px;
-  color: #333;
-  overflow-y: auto;
-}
-#reviews-list li p.createdAt {
-  float: right;
-}
-#reviews-list li p.updatedAt {
-  float: right;
-  color: #008800;
-  clear: both;
-}
-#reviews-list li p.rating {
-  float: left;
-}
-#reviews-list li p.comments {
-  clear: both;
+
+@keyframes fadeout {
+  from {
+    bottom: 30px; 
+    opacity: 1;
+  }
+  to {
+    bottom: 0; 
+    opacity: 0;
+  }
 }
 
 

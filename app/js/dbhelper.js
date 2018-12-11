@@ -66,7 +66,7 @@ static createRestaurantReview(id, name, rating, comments, callback) {
    */
   static fetchRestaurants(callback) {
 
-    const dbPromise = idb.open('restaurant-db', 2, function (upgradeDB) {
+    const dbPromise = idb.open('restaurant-db', 3, function (upgradeDB) {
       
       // if (!upgradeDB.objectStoreNames.contains('restaurants')) {
       //   upgradeDB.createObjectStore('restaurants', { keyPath: 'id' });
@@ -80,6 +80,10 @@ static createRestaurantReview(id, name, rating, comments, callback) {
           const reviewStore = upgradeDB.createObjectStore('reviews',
             { autoIncrement: true });
           reviewStore.createIndex('restaurant_id', 'restaurant_id');
+        case 0:
+        upgradeDB.createObjectStore('offline',
+          { keyPath: 'id', unique: true });
+
       }
 
 });
@@ -113,6 +117,64 @@ function fulfillResult(){
       return callback(null, reviews);
     });
   }
+
+  //idb for offline data storaage
+  function  setReturnId(store, val) {
+  return dbPromise.then(db => {
+    const tx = db.transaction(store, 'readwrite');
+    const pk = tx
+      .objectStore(store)
+      .put(val);
+    tx.complete;
+    return pk;
+  });
+}
+
+
+ // fetch a restaurant by ID
+ const fetchById = id => {
+    return dbPromise.then(db => {
+      const tx = db.transaction('restaurants');
+      const restaurantStore = tx.objectStore('restaurants');
+
+      return restaurantStore.get(parseInt(id));
+    })
+    .then(restaurant => restaurant)
+    .catch(error => console.log('Unable to fetch restaurant', error))
+  };
+  // save defred reviews
+ const writeDeferedReviewToIDB = (data) => {
+    return dbPromise
+      .then(db => {
+        const tx = db.transaction("offline", 'readwrite');
+        const store = tx.objectStore("offline");
+        store.put(data);
+        return tx.complete;
+      });return writeDeferedReviewToIDB;
+  }
+  // read all deererd reviews
+ const readeAllDeferedReviews = () => {
+    return dbPromise
+      .then(db => {
+        const tx = db.transaction("offline", "readonly");
+        const store = tx.objectStore("offline");
+
+        return store.getAll();
+      }); return readeAllDeferedReviews;
+  }
+  // delete defered reviews
+ const deleteDeferedReview = id => {
+    return dbPromise
+      .then(db => {
+        const tx = db.transaction("offline", "readwrite");
+        const store = tx.objectStore("offline");
+        store.delete(id);
+        return tx.complete;
+      })
+      .then(() => console.log('defered review deleted'));
+  }
+
+ 
 
 
 
@@ -301,6 +363,72 @@ return callback(null, restaurants);
   static imageUrlForRestaurant(restaurant) {
     return (`/app/img/${restaurant.id}.jpg`);
   }
+
+  // static fetchReviewsById(id, callback) {
+  //   db.getReviewByRestaurantId(id)
+
+  //     .then(reviews => {
+  //       if (reviews.length > 0) {
+  //         // got reviews from IDB
+  //         console.log("got reviews from IDB");
+  //         callback(null, reviews);
+  //       } else {
+  //         // no reviews in IDB
+  //         const url = `http://localhost:1337/reviews/?restaurant_id=${id}`;
+  //         // get  reviews online to render and save them to IDB
+  //         fetch(url)
+  //           .then(res => res.json())
+  //           .then(reviews => {
+  //             reviews = reviews.map(review => {
+  //               const unique =
+  //                 "_" +
+  //                 Math.random()
+  //                   .toString(36)
+  //                   .substr(2, 9);
+  //               return {
+  //                 id: review.id,
+  //                 restaurant_id: review.restaurant_id,
+  //                 unique: unique,
+  //                 name: review.name,
+  //                 rating: review.rating,
+  //                 comments: review.comments,
+  //                 createdAt: review.createdAt,
+  //                 updatedAt: review.updatedAt
+  //               };
+  //             });
+  //             db.addReviewByRestaurantId(reviews);
+  //             callback(null, reviews);
+  //           })
+  //           .catch(error => callback(error, null));
+  //       }
+  //     })
+  //     .catch(error => callback(error, null));
+  // }
+
+
+  /**
+   * save review data to the database
+   */
+  static sendReviewData(review, callback) {
+    // we are online or lie-fi
+    const url = "http://localhost:1337/reviews/";
+
+    fetch(url, {
+      method: "POST",
+      header: {
+        "Content-Type": "application/json",
+        Accept: "application/json"
+      },
+      body: JSON.stringify(review)
+    })
+      .then(res => res.json())
+      .then(review => callback(null, review))
+      .catch(error => {
+        // network failure
+        callback(error, null);
+      });
+  }
+
 
   /**
    * Map marker for a restaurant.
