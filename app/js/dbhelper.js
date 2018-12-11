@@ -142,28 +142,28 @@ function fulfillResult(){
     .then(restaurant => restaurant)
     .catch(error => console.log('Unable to fetch restaurant', error))
   };
-  // save defred reviews
- const writeDeferedReviewToIDB = (data) => {
+  // save added reviews
+ const writeNewReviewToIDB = (data) => {
     return dbPromise
       .then(db => {
         const tx = db.transaction("offline", 'readwrite');
         const store = tx.objectStore("offline");
         store.put(data);
         return tx.complete;
-      });return writeDeferedReviewToIDB;
+      });return writeNewReviewToIDB;
   }
-  // read all deererd reviews
- const readeAllDeferedReviews = () => {
+  // read all added reviews
+ const readeAllNewReviews = () => {
     return dbPromise
       .then(db => {
         const tx = db.transaction("offline", "readonly");
         const store = tx.objectStore("offline");
 
         return store.getAll();
-      }); return readeAllDeferedReviews;
+      }); return readeAllNewReviews;
   }
-  // delete defered reviews
- const deleteDeferedReview = id => {
+  // delete added reviews
+ const deleteNewReview = id => {
     return dbPromise
       .then(db => {
         const tx = db.transaction("offline", "readwrite");

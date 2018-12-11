@@ -392,7 +392,7 @@ setFormHandler = () => {
             }; 
 
             // save defered review to IDB
-            db.writeDeferedReviewToIDB(review)
+            db.writeNewReviewToIDB(review)
               .then(() => {
                 sw.sync.register("sync-new-reviews");
               })
